@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calculator-deployment
+  namespace: default
+  labels:
+    app: calculator
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: calculator
+  template:
+    metadata:
+      labels:
+        app: calculator
+        prometheus_io_scrape: "true"
+        prometheus_io_port: "4000"
+        prometheus_io_path: "metrics"
+    spec:
+      containers:
+        - name: calculator-container
+          image: varshini1815/simple_calculator:v3 # use your new image with updated server.js
+          ports:
+            - containerPort: 4000
+          envFrom:
+            - configMapRef:
+                name: calculator-config
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 4000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 4000
+            initialDelaySeconds: 5
+            periodSeconds: 5

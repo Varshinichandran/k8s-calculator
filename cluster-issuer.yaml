@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    # Use the Let's Encrypt production server
+    server: https://acme-v02.api.letsencrypt.org/directory
+    # Replace this with your real email for certificate expiration notifications
+    email: your-real-email@domain.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    # Solvers define how cert-manager will verify domain ownership
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
