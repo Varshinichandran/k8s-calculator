@@ -1,2 +1,7 @@
 node_modules/
 *.exe
+tls.key
+tls.crt
+*.key
+*.crt
+*.pem
